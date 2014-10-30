@@ -110,9 +110,11 @@ Moreover, the riders are able to fetch (via callUp()/callDown()) their elevators
 
 The pickup/drop off mechanism is facilitated via the ElevatorBarriers. The elevator gets hold of that floor’s ElevatorBarrier and raises(). Exactly like EventBarrier, this wakes up all riders on the floor. The elevator’s boolean and ElevatorBarrier lists are updated, the rider threads then fetch the destination floor’s corresponding ElevatorBarrier and block again. The process repeats then repeats except the riders will now exit the elevator.
 
+Our implementation of maximum capacity for a single elevator is not perfect. The program recognizes that certain people cannot enter an elevator if the elevator is full. This is logged in the Elevator.log. But despite the logic included, we seem to hit a deadlock and are never able to send another elevator back to the people who were never picked up because of occupancy problems. The output ends with only a handful of riders entering and exiting the elevators at their appropriate floors. We were unsure how to fix this, as we attempted to return a boolean from the Enter method of the elevator, where if the boolean was false, then the rider is logged, saying that entering is not possible. We then return to the Rider class and attempt to complete the barrier in order to restart the run() method of the rejected rider, however it does not seem to work. We believe it is a deadlock, but we are unsure. Moreover, the number of riders who enter and exit is sporadic. Sometimes, in fact, while testing maximum capacity. Riders will be rejected from an elevator, but then be picked up later. We have seen results from less than a half of the riders completing their journey to all the riders completing their journey when testing max capacity.
+
 Note*: Our building floors run from 0 to n-1 where n is the input number of floors given in the input file, e.g. n = 8 will give floors 0 to 7.
 
-Note*: If our max capcity value is 3 or higher, there doesn't seem to be a case where a rider is unable to enter the elevator. We did our capacity testing at a value of 2.
+Note*: If our max capacity value is 3 or higher, there doesn't seem to be a case where a rider is unable to enter the elevator. We did our capacity testing at a value of 2.
 
 Running the Event Barrier Test Case:
 
