@@ -1,15 +1,10 @@
 Number of Floors: 8
 Number of Elevators: 1
 Number of Riders: 8
-Max Capacity per Elevator: 8
+Max Capacity per Elevator: 2
 
-Rider1 pushes DOWN 3
-Rider3 pushes UP 1
-Rider4 pushes DOWN 7
-Rider5 pushes UP 2
-Rider6 pushes DOWN 6
-Rider2 pushes UP 2
-Rider7 pushes UP 0
+-----Rider2 pushes UP 2
+-----Rider3 pushes UP 1
 Elevator1 on Floor1 opens
 Rider3 enters Elevator1 on Floor1
 Rider3 pushes Elevator1 Button5
@@ -17,65 +12,19 @@ Elevator1 on Floor1 closes
 Elevator1 moves to Floor2
 Elevator1 on Floor2 opens
 Rider2 enters Elevator1 on Floor2
-Rider5 enters Elevator1 on Floor2
-Rider5 pushes Elevator1 Button5
-Elevator1 on Floor2 closes
 Rider2 pushes Elevator1 Button4
-Elevator1 moves to Floor3
-Elevator1 on Floor3 opens
-Rider1 enters Elevator1 on Floor3
-Rider1 pushes Elevator1 Button1
-Elevator1 on Floor3 closes
-Elevator1 moves to Floor2
-Elevator1 moves to Floor1
-Elevator1 on Floor1 opens
-Rider1 exits Elevator1 on Floor1
-Elevator1 on Floor1 closes
-Elevator1 moves to Floor2
+Elevator1 on Floor2 closes
 Elevator1 moves to Floor3
 Elevator1 moves to Floor4
 Elevator1 on Floor4 opens
-Rider2 exits Elevator1 on Floor4
+*****Rider2 exits Elevator1 on Floor4
 Elevator1 on Floor4 closes
 Elevator1 moves to Floor5
 Elevator1 on Floor5 opens
-Rider3 exits Elevator1 on Floor5
-Rider5 exits Elevator1 on Floor5
+*****Rider3 exits Elevator1 on Floor5
 Elevator1 on Floor5 closes
-Elevator1 moves to Floor6
-Elevator1 on Floor6 opens
-Rider6 enters Elevator1 on Floor6
-Rider6 pushes Elevator1 Button3
-Elevator1 on Floor6 closes
-Elevator1 moves to Floor5
-Elevator1 moves to Floor4
-Elevator1 moves to Floor3
-Elevator1 on Floor3 opens
-Rider6 exits Elevator1 on Floor3
-Elevator1 on Floor3 closes
-Elevator1 moves to Floor4
-Elevator1 moves to Floor5
-Elevator1 moves to Floor6
-Elevator1 moves to Floor7
-Elevator1 on Floor7 opens
-Rider4 enters Elevator1 on Floor7
-Rider4 pushes Elevator1 Button2
-Elevator1 on Floor7 closes
-Elevator1 moves to Floor6
-Elevator1 moves to Floor5
-Elevator1 moves to Floor4
-Elevator1 moves to Floor3
-Elevator1 moves to Floor2
-Elevator1 on Floor2 opens
-Rider4 exits Elevator1 on Floor2
-Elevator1 on Floor2 closes
-Elevator1 moves to Floor1
-Elevator1 moves to Floor0
-Elevator1 on Floor0 opens
-Rider7 enters Elevator1 on Floor0
-Rider7 pushes Elevator1 Button1
-Elevator1 on Floor0 closes
-Elevator1 moves to Floor1
-Elevator1 on Floor1 opens
-Rider7 exits Elevator1 on Floor1
-Elevator1 on Floor1 closes
+=====Rider4 pushes DOWN 7
+=====Rider6 pushes DOWN 6
+-----Rider7 pushes UP 0
+=====Rider1 pushes DOWN 3
+-----Rider5 pushes UP 2
