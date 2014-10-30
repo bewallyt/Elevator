@@ -111,8 +111,9 @@ Moreover, the riders are able to fetch (via callUp()/callDown()) their elevators
 The pickup/drop off mechanism is facilitated via the ElevatorBarriers. The elevator gets hold of that floor’s ElevatorBarrier and raises(). Exactly like EventBarrier, this wakes up all riders on the floor. The elevator’s boolean and ElevatorBarrier lists are updated, the rider threads then fetch the destination floor’s corresponding ElevatorBarrier and block again. The process repeats then repeats except the riders will now exit the elevator.
 
 
-Running the Elevator Test Case: 
+Running the Elevator Test Case:
 
+*Note: Our building floors run from 0 to n-1, where n is the input number of floors in the input file, e.g. an input of 8 is equivalent to floors 0 to 7.
 
 The class to run is the TestElevator.java class. It uses the Parser.java class to read an input text file with parameters and run the elevator service for the riders. The results will be printed to the console and a Elevator.log file. The contents of the results can be generally summarized with the following:
 
