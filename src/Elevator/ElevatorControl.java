@@ -5,62 +5,84 @@ import java.util.*;
 public class ElevatorControl {
 
     private Queue<Elevator> mElevatorQueue;
-    
+    private Queue<Elevator> aboveQueue;
+    private Queue<Elevator> belowQueue;
+
     public ElevatorControl(Queue<Elevator> mElevatorQueue, Building bc) {
         this.mElevatorQueue = mElevatorQueue;
+        this.aboveQueue = new LinkedList<Elevator>();
+        this.belowQueue = new LinkedList<Elevator>();
     }
 
 
     public Elevator returnBestElevator(int fromFloor, boolean goUp) {
 
-        Elevator elevator = mElevatorQueue.poll();
-        if (elevator.peopleinElevator.size() == 0) {
-            mElevatorQueue.add(elevator);
-            return elevator;
-        } else if (elevator.peopleinElevator.size() == elevator.maxOccupancyThreshold) {
-            mElevatorQueue.add(elevator);
-            returnBestElevator(fromFloor, goUp);
+        if (mElevatorQueue.size()==1) {
+            return mElevatorQueue.peek();
         } else {
-            if (goUp) {
-                spaceAvailableElevatorsUp(elevator, mElevatorQueue, fromFloor);
+            Elevator elevator = mElevatorQueue.poll();
+            if (elevator.peopleinElevator == null || elevator.peopleinElevator.size() == 0) {
+                mElevatorQueue.add(elevator);
+                return elevator;
+            } else if (elevator.peopleinElevator.size() == elevator.maxOccupancyThreshold) {
+                mElevatorQueue.add(elevator);
+                returnBestElevator(fromFloor, goUp);
             } else {
-                spaceAvailableElevatorsDown(elevator, mElevatorQueue, fromFloor);
+                pruneElevators(fromFloor);
+                if (goUp) {
+                    upElevator(aboveQueue);
+                } else {
+                    downElevator(belowQueue);
+                }
             }
         }
-
         return null;
     }
 
-    private Elevator spaceAvailableElevatorsUp(Elevator elevator, Queue<Elevator> elevatorQueue, int fromFloor) {
-        boolean elevatorExists = false;
-
-        if (elevator.currentfloor <= fromFloor && elevator.currentfloor > elevatorQueue.peek().currentfloor) {
-              elevatorExists = true;
+    private void pruneElevators(int fromFloor) {
+        for (Elevator e : mElevatorQueue) {
+            if (e.currentfloor >= fromFloor) {
+                aboveQueue.add(e);
+            } else {
+                belowQueue.add(e);
+            }
         }
-        elevatorQueue.add(elevator);
-        if (elevatorExists) {
-            return elevator;
-        } else {
-            spaceAvailableElevatorsDown(elevatorQueue.poll(), elevatorQueue, fromFloor);
-        }
-       return null;
     }
 
-    private Elevator spaceAvailableElevatorsDown(Elevator elevator, Queue<Elevator> elevatorQueue, int fromFloor) {
+    private Elevator upElevator(Queue<Elevator> elevatorQueue) {
         boolean elevatorExists = false;
-
-        if (elevator.currentfloor >= fromFloor && elevator.currentfloor < elevatorQueue.peek().currentfloor) {
-            elevatorExists = true;
+        Elevator headElevator = elevatorQueue.poll();
+        for (Elevator e : elevatorQueue) {
+            if (headElevator.currentfloor <= e.currentfloor) {
+                elevatorExists = true;
+            }
         }
-        elevatorQueue.add(elevator);
         if (elevatorExists) {
-            return elevator;
+            return headElevator;
         } else {
-            spaceAvailableElevatorsUp(elevatorQueue.poll(), elevatorQueue, fromFloor);
+            elevatorQueue.add(headElevator);
+            upElevator(elevatorQueue);
         }
         return null;
-
     }
+
+    private Elevator downElevator(Queue<Elevator> elevatorQueue) {
+        boolean elevatorExists = false;
+        Elevator headElevator = elevatorQueue.poll();
+        for (Elevator e : elevatorQueue) {
+            if (headElevator.currentfloor >= e.currentfloor) {
+                elevatorExists = true;
+            }
+        }
+        if (elevatorExists) {
+            return headElevator;
+        } else {
+            elevatorQueue.add(headElevator);
+            downElevator(elevatorQueue);
+        }
+        return null;
+    }
+
 }
 
 
