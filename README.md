@@ -120,7 +120,7 @@ To test, run the following in your choice of shell/terminal:
 
     java -jar lab3.jar p1
 
-The output will print out the number of threads waiting, the arrival of threads, the raising and lowering of the barrier and thread completion. The output can be found in EventBarrier.log.
+The output will print out the number of threads waiting, the arrival of threads, the raising and lowering of the barrier and thread completion. The output can be found in EventBarrier.log, in the directory containing the jar file.
 
 Running the Elevator Test Case: 
 
