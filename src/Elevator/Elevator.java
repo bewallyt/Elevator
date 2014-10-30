@@ -58,7 +58,7 @@ public class Elevator extends AbstractElevator implements Runnable{
 
     @Override
 	public void run() {
-    	while(true){
+    	while(TheEnd.numRiders > 0){
     		
     		if(currentfloor>=numFloors-1){
     			directionUp = false;
@@ -182,6 +182,7 @@ public class Elevator extends AbstractElevator implements Runnable{
     @Override
     public synchronized void Exit(Rider rider, int elevatorID, int floor) {
         peopleinElevator.remove(rider);
+        TheEnd.numRiders--;
         System.out.println("Rider"+rider.riderID+" exits Elevator"+elevatorID+" on Floor"+floor);
     }
 

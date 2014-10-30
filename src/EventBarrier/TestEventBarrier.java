@@ -1,8 +1,15 @@
 package EventBarrier;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 public class TestEventBarrier {
 	
-	  public static void Test(){
+	  public static void test() throws FileNotFoundException{
+		  
+		  PrintStream out = new PrintStream(new FileOutputStream("ElevatorBarrier.log"));
+	       System.setOut(out);
 		  
 		  	EventBarrier eb = new EventBarrier();
 		  	

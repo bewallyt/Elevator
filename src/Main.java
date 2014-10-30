@@ -6,13 +6,13 @@ import EventBarrier.TestEventBarrier;
 public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		if(args[1].equals("p1")){
+		if(args[0].equals("p1")){
 			/* Runs EventBarrier Test */
-			TestEventBarrier.Test();
+			TestEventBarrier.test();
 		}
 		else{
 			/* Runs Elevator Test where argument is test case */
-//			TestElevator.test(args[1]);
+			TestElevator.test(args[0]);
 		}
 	}
 }

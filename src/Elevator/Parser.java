@@ -74,6 +74,9 @@ public class Parser {
 		/* Create rider threads
 		 * Benson: Replaced number of riders with number of requests.
 		 * There can be fewer request than the number of riders */
+        
+        TheEnd.numRiders = findNumLines(filename);
+        
 		for(int i = 0; i < findNumLines(filename); i++){
 			
 			int riderID = input.nextInt();
