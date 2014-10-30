@@ -3,8 +3,6 @@ package Elevator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
 public class Building extends AbstractBuilding {
@@ -12,7 +10,8 @@ public class Building extends AbstractBuilding {
 	protected int numFloors;
 	private int numElevators;
     protected HashMap<Integer,ArrayList<Integer>> floorRequestMap;
-    protected Queue<Rider> peopleinBuilding;
+    boolean idling = false;
+    Object lock = new Object();
 	
 	ArrayList<ElevatorBarrier> ebListOUT = new ArrayList<ElevatorBarrier>();
 	ArrayList<ElevatorBarrier> ebListUP = new ArrayList<ElevatorBarrier>();
@@ -28,7 +27,6 @@ public class Building extends AbstractBuilding {
         this.ebListOUT = ebListOUT;
         this.ebListUP = ebListUP;
         this.ebListDOWN = ebListDOWN;
-        this.peopleinBuilding = new LinkedList<Rider>();
         this.floorRequestMap = new HashMap<Integer, ArrayList<Integer>>();
         makeFloorArrays(numFloors);
     }
@@ -42,8 +40,8 @@ public class Building extends AbstractBuilding {
 
     /** Called by Rider Threads, returns the elevator that can efficiently serve rider. */
 	@Override
-	public synchronized AbstractElevator CallUp(int fromFloor, int riderID) {
-		System.out.println("-----Rider"+riderID+" pushes UP "+fromFloor);
+	public synchronized AbstractElevator CallUp(int fromFloor, int riderID, ElevatorBarrier eb) {
+		System.out.println("Rider"+riderID+" pushes UP "+fromFloor);
 
 		Elevator tempElevator = Parser.ec.returnBestElevator(fromFloor, true);
 		tempElevator.stopfloorsUP[fromFloor] = true;
@@ -51,8 +49,8 @@ public class Building extends AbstractBuilding {
     }
 
 	@Override
-	public synchronized AbstractElevator CallDown(int fromFloor, int riderID) {
-		System.out.println("=====Rider"+riderID+" pushes DOWN "+fromFloor);
+	public synchronized AbstractElevator CallDown(int fromFloor, int riderID, ElevatorBarrier eb) {
+		System.out.println("Rider"+riderID+" pushes DOWN "+fromFloor);
 
 		Elevator tempElevator = Parser.ec.returnBestElevator(fromFloor, false);
 		tempElevator.stopfloorsDOWN[fromFloor] = true;
@@ -63,24 +61,24 @@ public class Building extends AbstractBuilding {
 		return numElevators;
 	}
     
-//    public void removeDownBarrier(ElevatorBarrier eb){
-//    	downBarriers.remove(eb);
-//    }
-//    
-//    public void removeUpBarrier(ElevatorBarrier eb){
-//    	upBarriers.remove(eb);
-//    }
-//
-//	@Override
-//	public AbstractElevator CallUp(int fromFloor, int riderID) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public AbstractElevator CallDown(int fromFloor, int riderID) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+    public void removeDownBarrier(ElevatorBarrier eb){
+    	downBarriers.remove(eb);
+    }
+    
+    public void removeUpBarrier(ElevatorBarrier eb){
+    	upBarriers.remove(eb);
+    }
+
+	@Override
+	public AbstractElevator CallUp(int fromFloor, int riderID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbstractElevator CallDown(int fromFloor, int riderID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

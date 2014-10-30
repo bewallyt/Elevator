@@ -12,7 +12,7 @@ public class Main {
 		}
 		else{
 			/* Runs Elevator Test where argument is test case */
-			TestElevator.test(args[1]);
+//			TestElevator.test(args[1]);
 		}
 	}
 }

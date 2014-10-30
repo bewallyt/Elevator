@@ -24,19 +24,21 @@ public class ElevatorControl {
             if (elevator.peopleinElevator == null || elevator.peopleinElevator.size() == 0) {
                 mElevatorQueue.add(elevator);
                 return elevator;
-            } else if (elevator.peopleinElevator.size() == elevator.maxOccupancyThreshold) {
-                mElevatorQueue.add(elevator);
-                returnBestElevator(fromFloor, goUp);
-            } else {
-                pruneElevators(fromFloor);
-                if (goUp) {
-                    upElevator(aboveQueue);
-                } else {
-                    downElevator(belowQueue);
-                }
+            } //else if (elevator.peopleinElevator.size() == elevator.maxOccupancyThreshold) {
+               // mElevatorQueue.add(elevator);
+               // returnBestElevator(fromFloor, goUp); }
+             else {
+            	mElevatorQueue.add(elevator);
+            	return mElevatorQueue.peek();
+//                pruneElevators(fromFloor);
+//                if (goUp) {
+//                    upElevator(aboveQueue);
+//                } else {
+//                    downElevator(belowQueue);
+//                }
             }
         }
-        return null;
+//        return null;
     }
 
     private void pruneElevators(int fromFloor) {

@@ -19,6 +19,7 @@ public class Elevator extends AbstractElevator implements Runnable{
     protected Building bc;
     boolean directionUp;
     boolean directionDown;
+    int counter = 0;
     
     /**
      * Other variables/data structures as needed goes here
@@ -57,72 +58,73 @@ public class Elevator extends AbstractElevator implements Runnable{
 
     @Override
 	public void run() {
-    	while(true){	
-    		if(currentfloor==numFloors-1){						//ADD IN THE TWO CASES WHERE THE ELEVATOR IS ON THE EXTREME FLOORS
-    			directionDown = true;
+    	while(true){
+    		
+    		if(currentfloor>=numFloors-1){
     			directionUp = false;
-    		}else if(currentfloor==1){
+    			directionDown = true;
+    		}else if (currentfloor<=0){
     			directionDown = false;
-    			directionUp = true;
+    			directionUp = true;			
     		}
     		
-    		if(stopfloorsUP[currentfloor]) {					//any calls from riders in building to go up on current floor
+    		
+    		if(stopfloorsUP[currentfloor]) {
     			OpenDoors();
-    			bc.ebListUP.get(currentfloor).raise();			//raise event barrier on that level, open doors
+    			bc.ebListUP.get(currentfloor).raise();
 				ClosedDoors();
-				directionUp = true;								//set direction to go up
+				directionUp = true;
 				directionDown = false;
-				stopfloorsUP[currentfloor] = false;				//!!! MUST CHANGE THIS --> IF NOT ALL RIDERS ABLE TO ENTER 
-				//stopfloorsDOWN[currentfloor] = false;			//remove all call signals from current floor - NOT NECESSARILY FOR UP AND DOWN
+				stopfloorsUP[currentfloor] = false;
+				//stopfloorsDOWN[currentfloor] = false;
 				//stopfloorsOUT[currentfloor] = false;
     		}
-    		else if (stopfloorsDOWN[currentfloor]) {			//any calls from riders in building to go down on current floor
+    		else if (stopfloorsDOWN[currentfloor]) {
     			OpenDoors();
-    			bc.ebListDOWN.get(currentfloor).raise();		//raise event barrier on that level, open doors
+    			bc.ebListDOWN.get(currentfloor).raise();
 				ClosedDoors();
-				directionDown = true;							//set direction to go down
+				directionDown = true;
 				directionUp = false;
-				//stopfloorsUP[currentfloor] = false;				//remove all call signals from current floor
+				//stopfloorsUP[currentfloor] = false;
 				stopfloorsDOWN[currentfloor] = false;
 				//stopfloorsOUT[currentfloor] = false;
     		}
-    		else if (stopfloorsOUT[currentfloor]) {				//any calls from riders in elevator to exit on that floor
+    		else if (stopfloorsOUT[currentfloor]) {
     			OpenDoors();
-    			bc.ebListOUT.get(currentfloor).raise();			//raise event barrier on that level, open doors 
-				ClosedDoors();	
+    			bc.ebListOUT.get(currentfloor).raise();
+				ClosedDoors();
 				//stopfloorsUP[currentfloor] = false;
 				//stopfloorsDOWN[currentfloor] = false;
 				stopfloorsOUT[currentfloor] = false;
-				if(!this.peopleinElevator.isEmpty()) {			//if there are still people in elevator who have not exited
-    				Rider rider = this.peopleinElevator.peek();	// check destination of next rider in queue
-    				if(rider.destFloor < currentfloor) {		//set direction (going down)
+				if(!this.peopleinElevator.isEmpty()) {
+    				Rider rider = this.peopleinElevator.peek();
+    				if(rider.destFloor < currentfloor) {
     					directionUp = false;
     					directionDown = true;
     				}
-    				else {										//set direction (going up)
+    				else {
     					directionUp = true;
     					directionDown = false;
     				}
 				}
-				else {											//if elevator empty, everyone has exited elevator 
-					directionUp = false;						//set no direction, temporarily idle(?)
+				else {
+					directionUp = false;
 					directionDown = false;
-					
 					boolean remainingRequests = false;
 					int requestFloor = 0;
-					for(int i=0; i<bc.numFloors; i++){			//loop through all the floors --> recheck if there are any more requests
-						if(stopfloorsUP[i]){					//still exists requests going up
+					for(int i=0; i<bc.numFloors; i++){
+						if(stopfloorsUP[i]){
 							remainingRequests = true;
-							requestFloor = i+1;					//record that floor (functional, but might want to use int[] instead since may have multiple requests
+							requestFloor = i+1;
 						}
-						if(stopfloorsDOWN[i]){					//still exists requests going down
+						if(stopfloorsDOWN[i]){
 							remainingRequests = true;
-							requestFloor = i+1;					//record that floor	
+							requestFloor = i+1;
 						}
 					}
-					if(remainingRequests) {						//if still exists requests, set direction towards that floor and go to that floor
+					if(remainingRequests) {
 						if(requestFloor == 0) {
-							directionUp = false;				//IDLE
+							directionUp = false;
 							directionDown = false;
 						}
 						else if(requestFloor > currentfloor) {
@@ -133,23 +135,19 @@ public class Elevator extends AbstractElevator implements Runnable{
 						}
 					}
 				}
-    		}//end of OUT 
+    		}
     		
-    		if(directionUp && !directionDown) {							//if direction set up, elevator goes up
+    		if(directionUp && !directionDown) {
     			VisitFloor(currentfloor+1);
     		}
-    		else if(!directionUp && directionDown) {					//if direction set down, elevator does down
+    		else if(!directionUp && directionDown) {
     			VisitFloor(currentfloor-1);
     		}
-    		else {														//if idle? doesnt do anything yet 
-				for(Rider r : bc.peopleinBuilding){			//check if still have people waiting on elevators in building
-					if(r.startFloor<r.destFloor){			//if rider is going up
-						bc.CallUp(r.startFloor, r.riderID);	
-					}else if(r.startFloor>r.destFloor){
-						bc.CallDown(r.startFloor, r.riderID);
-					}
-				}
-    		
+    		else {
+//    			System.out.println("ELEVATOR IS IDLING");
+    			//synchronized (bc.lock){
+    				bc.idling = true;
+    			//}
     		}
     	}
     }
@@ -173,20 +171,18 @@ public class Elevator extends AbstractElevator implements Runnable{
     @Override
     public synchronized boolean Enter(Rider rider, int elevatorID, int floor) {
         if (peopleinElevator.size() < maxOccupancy) {
-        	bc.peopleinBuilding.remove(rider);
-            peopleinElevator.add(rider);				//add rider to elevator (queue)
+            peopleinElevator.add(rider);
             System.out.println("Rider"+rider.riderID+" enters Elevator"+elevatorID+" on Floor"+floor);
             return true;
         } else {
-        	System.out.println("Rider"+rider.riderID+" cannot enter");
             return false;
         }
     }
 
     @Override
     public synchronized void Exit(Rider rider, int elevatorID, int floor) {
-        peopleinElevator.remove(rider);					//remove rider to elevator (queue)
-        System.out.println("*****Rider"+rider.riderID+" exits Elevator"+elevatorID+" on Floor"+floor);
+        peopleinElevator.remove(rider);
+        System.out.println("Rider"+rider.riderID+" exits Elevator"+elevatorID+" on Floor"+floor);
     }
 
     @Override

@@ -20,40 +20,46 @@ public class Rider implements Runnable{
 	public void run() {
 		boolean isGoingUp = startFloor < destFloor;
 		
-		if(isGoingUp) {													//rider going up
+		if(isGoingUp) {
 			eb = bc.ebListUP.get(startFloor);							//get event barrier on the rider's start floor
-			elevator = (Elevator) bc.CallUp(startFloor, riderID);		//CALLUP and return elevator from scheduling algorithm
-			bc.peopleinBuilding.add(this);
+			elevator = (Elevator) bc.CallUp(startFloor, riderID, eb);	//CALLUP and return elevator from scheduling algorithm
 		}
-		else {															//rider going down
-			eb = bc.ebListDOWN.get(startFloor);							//get event barrier on the rider's start floor
-			elevator = (Elevator) bc.CallDown(startFloor, riderID);		//CALLDOWN and return elevator from scheduling algorithm
-			bc.peopleinBuilding.add(this);
+		else {
+			eb = bc.ebListDOWN.get(startFloor);
+			elevator = (Elevator) bc.CallDown(startFloor, riderID, eb);	//CALLDOWN and return elevator from scheduling algorithm
 		}
 		
-		if(elevator.currentfloor < startFloor) {						//set elevator's current direction UP	
+		if(elevator.currentfloor < startFloor) {
 			elevator.directionUp = true;
 			elevator.directionDown = false;
 		}
-		else if (elevator.currentfloor > startFloor) {					//set elevator's current direction DOWN
+		else if (elevator.currentfloor > startFloor) {
 			elevator.directionUp = false;
-			elevator.directionDown = true; 
+			elevator.directionDown = true;
 		}
 		
-		eb.arrive();													//ARRIVE and wait at barrier
-		if (elevator.Enter(this, elevator.elevatorId, startFloor)) {	//if elevator not full, rider will ENTER
-			eb.complete();												
+		eb.arrive();												//ARRIVE and wait at barrier
+		if (elevator.Enter(this, elevator.elevatorId, startFloor)) {	//if elevator not full and possible to ENTER
+			eb.complete();
 			elevator.RequestFloor(destFloor, riderID, isGoingUp);
 			eb = bc.ebListOUT.get(destFloor);
 			eb.arrive();
 			elevator.Exit(this, elevator.elevatorId, destFloor);
 			eb.complete();
-		}else{																//rider cannot enter 
-				//MUST CHANGE THIS: WHAT HAPPENS IF FALSE, RIDER CANNOT ENTER?
-				//rider not removed from queue, still in peopleinBuilding 
+		}else{
+			System.out.println("Rider"+ riderID+ " cannot enter elevator");
 			eb.complete();
-			System.out.println("Rider"+riderID+" cannot enter");
+			//synchronized(bc.lock){
+				while(!bc.idling){
+				}
+				bc.idling = false;
+			//}
+			System.out.println("********************"); 
+			run();
+			
+			
 		}
+		
 	}
 
 }
