@@ -58,7 +58,7 @@ public class Elevator extends AbstractElevator implements Runnable{
     @Override
 	public void run() {
     	while(true){	
-    		if(currentfloor==numFloors){						//ADD IN THE TWO CASES WHERE THE ELEVATOR IS ON THE EXTREME FLOORS
+    		if(currentfloor==numFloors-1){						//ADD IN THE TWO CASES WHERE THE ELEVATOR IS ON THE EXTREME FLOORS
     			directionDown = true;
     			directionUp = false;
     		}else if(currentfloor==1){
