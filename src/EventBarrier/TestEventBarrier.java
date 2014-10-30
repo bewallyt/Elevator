@@ -8,7 +8,7 @@ public class TestEventBarrier {
 	
 	  public static void test() throws FileNotFoundException{
 		  
-		  PrintStream out = new PrintStream(new FileOutputStream("ElevatorBarrier.log"));
+		  PrintStream out = new PrintStream(new FileOutputStream("EventBarrier.log"));
 	       System.setOut(out);
 		  
 		  	EventBarrier eb = new EventBarrier();

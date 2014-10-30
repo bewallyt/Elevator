@@ -98,11 +98,9 @@ Naturally, design patterns provide abstractions for which members of a team can 
 The Building Class serves as the model: It stores the number of elevators and floors as well as lists of up/down/out ElevatorBarriers that the elevator threads will reference. Moreover the Building Class contains CallUp() and CallDown() which interact with the Elevator Controller to return the correct elevator.
 
 
-The ElevatorController Class serves as our controller and implements an algorithm similar to SCAN. It dedicates elevators to a particular direction, and these elevator’s can’t pick up riders going into another direction until the elevator is idle (i.e. empty). ElevatorController looks for available elevators and finds the best elevator given the parameters of the request (floor, direction) via returnBestElevator(). 
+The ElevatorController Class serves as our controller and implements an algorithm similar to SCAN. It dedicates elevators to a particular direction, and these elevator’s can’t pick up riders going into another direction until the elevator is idle (i.e. empty). ElevatorController looks for available elevators and finds the best elevator given the parameters of the request (floor, direction) via returnBestElevator(). The ElevatorController has a queue of elevators that is populated when the parser runs. When a person requests an elevator, the ElevatorController checks the head of the queue and returns if the elevator has no people on it, otherwise, it simply returns the next elevator in the queue.
 
-
-A global queue is used to store all the elevators. returnBestElevator() is a recursive function. Every call, an elevator is polled from the queue, given that we find an elevator that is empty, we enqueue and return that elevator (base case, essentially). Given that we find an elevator that is max capacity, we enqueue that elevator and recur on returnBestElevator() to find the next available elevator. Otherwise given the case the elevator has someone on it but isn’t completely full, we search for an elevator with space available. This is performed through the functions spaceAvailableElevatorsUp() and spaceAvailableElevatorsDown(). Essentially, these recursive functions check whether or not the the current elevator is the closest and lower/higher (depending on whether it’s an up/down elevator) to the rider.
-
+The resource scheduling of the elevators is done with logic in the elevator class itself. Each elevator has a boolean array that is the size of the number of floors in the building. The boolean array contains true at indexes (aka floors) where riders want to exit. All requests are placed in the boolean array of each elevator. By checking the current position of the elevator and the nearest destination, a specific elevator can serve a specific request. In this manner, one elevator can efficiently pick up riders on consecutive floors and drop them off as needed. The boolean array makes the performance of multiple elevators relatively smooth.
 
 The Rider and Elevator classes can be interpreted as the view not only because Elevator prints information to the screen, but also because the model (the Building Class) updates both the Rider and Elevator instances. The Rider threads are run before the Elevator threads. The rider threads ‘arrive()’ at their floors by fetching their respective ElevatorBarriers (depending on whether they are going up or down) through the Building Class. 
 
@@ -112,6 +110,17 @@ Moreover, the riders are able to fetch (via callUp()/callDown()) their elevators
 
 The pickup/drop off mechanism is facilitated via the ElevatorBarriers. The elevator gets hold of that floor’s ElevatorBarrier and raises(). Exactly like EventBarrier, this wakes up all riders on the floor. The elevator’s boolean and ElevatorBarrier lists are updated, the rider threads then fetch the destination floor’s corresponding ElevatorBarrier and block again. The process repeats then repeats except the riders will now exit the elevator.
 
+Note*: Our building floors run from 0 to n-1 where n is the input number of floors given in the input file, e.g. n = 8 will give floors 0 to 7.
+
+Note*: If our max capcity value is 3 or higher, there doesn't seem to be a case where a rider is unable to enter the elevator. We did our capacity testing at a value of 2.
+
+Running the Event Barrier Test Case:
+
+To test, run the following in your choice of shell/terminal:
+
+    java -jar lab3.jar p1
+
+The output will print out the number of threads waiting, the arrival of threads, the raising and lowering of the barrier and thread completion. The output can be found in EventBarrier.log.
 
 Running the Elevator Test Case: 
 
@@ -129,6 +138,18 @@ The class to run is the TestElevator.java class. It uses the Parser.java class t
 * Rider exits
 * Elevator doors close
 * Repeat until all riders are served
+
+To test, run the following in your choice of shell/terminal:
+
+    java -jar lab3.jar [input text file]
+
+[input text file] will have a value of one of the following:
+
+    elevator_part1.txt
+    elevator_part2.txt
+    elevator_part3.txt
+
+Elevator.log will be printed to the directory containing the lab3.jar file.
 
 
 /************************
