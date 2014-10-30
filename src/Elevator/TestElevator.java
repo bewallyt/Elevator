@@ -12,7 +12,7 @@ public class TestElevator {
 		
 		/* Run elevator */
         out = new PrintStream(new FileOutputStream("Elevator.log"));
- //       System.setOut(out);
+        System.setOut(out);
 		Parser parser = new Parser();
 		parser.parse("ElevatorInputFile.txt");
 		
