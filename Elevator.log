@@ -4,8 +4,8 @@ Number of Riders: 10
 Max Capacity per Elevator: 3
 
 Rider1 pushes DOWN 3
-Rider2 pushes UP 2
 Rider3 pushes UP 1
+Rider2 pushes UP 2
 Rider4 pushes DOWN 7
 Rider5 pushes UP 2
 Rider6 pushes DOWN 6
@@ -18,12 +18,12 @@ Rider10 enters Elevator1 on Floor1
 Rider3 enters Elevator1 on Floor1
 Rider8 enters Elevator1 on Floor1
 Rider9 cannot enter elevator
-Elevator1 on Floor1 closes
 Rider8 pushes Elevator1 Button5
+Elevator1 on Floor1 closes
+Rider3 pushes Elevator1 Button5
+Rider10 pushes Elevator1 Button5
 Elevator1 moves to Floor2
 Elevator1 on Floor2 opens
-Rider10 pushes Elevator1 Button5
-Rider3 pushes Elevator1 Button5
 Rider5 cannot enter elevator
 Rider2 cannot enter elevator
 Elevator1 on Floor2 closes
@@ -43,9 +43,9 @@ Elevator1 moves to Floor3
 Elevator1 moves to Floor4
 Elevator1 moves to Floor5
 Elevator1 on Floor5 opens
+Rider3 exits Elevator1 on Floor5
 Rider10 exits Elevator1 on Floor5
 Rider8 exits Elevator1 on Floor5
-Rider3 exits Elevator1 on Floor5
 Elevator1 on Floor5 closes
 Elevator1 moves to Floor6
 Elevator1 on Floor6 opens
