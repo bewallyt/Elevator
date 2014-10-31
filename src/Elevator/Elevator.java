@@ -144,9 +144,6 @@ public class Elevator extends AbstractElevator implements Runnable{
 				VisitFloor(currentfloor-1);
 			}
 			else {
-				while(stopfloorsOUT[currentfloor] || stopfloorsUP[currentfloor] || stopfloorsDOWN[currentfloor]) {
-
-				}
 				//synchronized (bc.lock){
 				bc.idling = true;
 				//}

@@ -51,10 +51,15 @@ public class Rider implements Runnable{
 			eb.complete();
 			//synchronized(bc.lock){
 				while(!bc.idling){
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				bc.idling = false;
-			//}
-			System.out.println("********************"); 
+			//} 
 			run();
 			
 			
